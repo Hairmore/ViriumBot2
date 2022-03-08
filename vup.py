@@ -39,6 +39,7 @@ async def on_ready():
 
     # get the guild
     guild = client.get_guild(GUILD_ID)
+    print(guild)
     
     ticket_modS_role = guild.get_role(role_id=MOD_S_ID)  # ticket moderator role
     ticket_modJ_role = guild.get_role(role_id=MOD_J_ID)
@@ -57,65 +58,55 @@ async def approved(ctx):
 
     roles_not_modBot = [r.name for r in ctx.guild.get_member(id_not_modBot).roles]
     #If not mod, cannot give this command
-    if ticket_modS_role not in author_roles:
-        if ticket_modJ_role not in author_roles:
-            await ctx.send("You don't have the permission to give this command", delete_after=5.0) 
-        else:
-            if "v.approved" not in message_mod:
-                overwrites = {
-                    ctx.guild.me: discord.PermissionOverwrite(view_channel=False),
-                    ctx.guild.default_role: discord.PermissionOverwrite(view_channel=False),
-                    ticket_modS_role: discord.PermissionOverwrite(view_channel=None),
-                    ticket_modS_role: discord.PermissionOverwrite(view_channel=None),
-                    management_role: discord.PermissionOverwrite(view_channel=True),
-                }
-                await ctx.channel.edit(overwrites=overwrites)
 
-                category_name = ctx.channel.category.name.upper()
-                """
-                if "FOLLOWER" in category_name:
-                    if "follower" in roles_not_modBot:
-                        await ctx.channel.send(f"Sorry, {ctx.guild.get_member(id_not_modBot).mention} you already identified as a follower.")
-                    else:
-                        await ctx.channel.send(
-                            "Ticket Approved!\nYour ticket has been approved and has been transferred through to the Management Team."
-                        )
-                        # Once the proof is sent, we add 0.5p to the whitelist score
-                        fol_data = pd.read_csv(csv_file, sep="\t", dtype = {'mem_id': str})
-                        author_index = fol_data[fol_data.mem_id == str(id_not_modBot)].index.tolist()[0]
-                        fol_data.iloc[author_index, 8] = "Yes"
-                        fol_data.to_csv(csv_file, index=False, sep='\t')
+    if "v.approved" not in message_mod:
+        print("hhhhhh")
 
-                        #We give a role to this member, and he can never open a follow ticket
-                        var = discord.utils.get(ctx.guild.roles, name = "follower")
-                        user = ctx.guild.get_member(id_not_modBot)
-                        await user.add_roles(var)
-                    """
-                """
-                if "CONTEST" in category_name:
-                    print("ezgfqk")
-                    await ctx.channel.send(
-                        "Ticket Approved!\nYour ticket has been approved and has been transferred through to the Management Team.\n1 point is added to your score"
-                    )
-                    #Once the proof is sent, we add 0.5p to the whitelist score
-                    fol_data = pd.read_csv(csv_file, sep="\t", dtype = {'mem_id': str})
-                    author_index = fol_data[fol_data.mem_id == str(id_not_modBot)].index.tolist()[0]
-                    c_times = fol_data.iloc[author_index, 3]
-                    fol_data.iloc[author_index, 3] = c_times + 1
-                    fol_data.to_csv(csv_file, index=False, sep='\t')
-                 """
-
-                if "SPAM" in category_name:
-                    await ctx.channel.send(
-                        "Ticket Approved!\n Thank you for reporting spam! 0.5 points will be added to your whitelist score."
-                    )
-                    """ Once the proof is sent, we add 0.5p to the whitelist score"""
-                    fol_data = pd.read_csv(csv_file, sep="\t", dtype = {'mem_id': str})
-                    author_index = fol_data[fol_data.mem_id == str(id_not_modBot)].index.tolist()[0]
-                    e_times = fol_data.iloc[author_index, 12]
-                    fol_data.iloc[author_index, 12] = e_times + 1
-                    fol_data.to_csv(csv_file, index=False, sep='\t')
+        category_name = ctx.channel.category.name.upper()
+        """
+        if "FOLLOWER" in category_name:
+            if "follower" in roles_not_modBot:
+                await ctx.channel.send(f"Sorry, {ctx.guild.get_member(id_not_modBot).mention} you already identified as a follower.")
             else:
-                await ctx.channel.send("Command <<v.approved>> already given.", delete_after=5.0)
+                await ctx.channel.send(
+                    "Ticket Approved!\nYour ticket has been approved and has been transferred through to the Management Team."
+                )
+                # Once the proof is sent, we add 0.5p to the whitelist score
+                fol_data = pd.read_csv(csv_file, sep="\t", dtype = {'mem_id': str})
+                author_index = fol_data[fol_data.mem_id == str(id_not_modBot)].index.tolist()[0]
+                fol_data.iloc[author_index, 8] = "Yes"
+                fol_data.to_csv(csv_file, index=False, sep='\t')
+
+                #We give a role to this member, and he can never open a follow ticket
+                var = discord.utils.get(ctx.guild.roles, name = "follower")
+                user = ctx.guild.get_member(id_not_modBot)
+                await user.add_roles(var)
+            """
+        """
+        if "CONTEST" in category_name:
+            print("ezgfqk")
+            await ctx.channel.send(
+                "Ticket Approved!\nYour ticket has been approved and has been transferred through to the Management Team.\n1 point is added to your score"
+            )
+            #Once the proof is sent, we add 0.5p to the whitelist score
+            fol_data = pd.read_csv(csv_file, sep="\t", dtype = {'mem_id': str})
+            author_index = fol_data[fol_data.mem_id == str(id_not_modBot)].index.tolist()[0]
+            c_times = fol_data.iloc[author_index, 3]
+            fol_data.iloc[author_index, 3] = c_times + 1
+            fol_data.to_csv(csv_file, index=False, sep='\t')
+            """
+
+        if "SPAM" in category_name:
+            await ctx.channel.send(
+                "Ticket Approved!\n Thank you for reporting spam! 0.5 points will be added to your whitelist score."
+            )
+            """ Once the proof is sent, we add 0.5p to the whitelist score"""
+            fol_data = pd.read_csv(csv_file, sep="\t", dtype = {'mem_id': str})
+            author_index = fol_data[fol_data.mem_id == str(id_not_modBot)].index.tolist()[0]
+            e_times = fol_data.iloc[author_index, 12]
+            fol_data.iloc[author_index, 12] = e_times + 1
+            fol_data.to_csv(csv_file, index=False, sep='\t')
+    else:
+        await ctx.channel.send("Command <<v.approved>> already given.", delete_after=5.0)
 
 client.run(bot_token)

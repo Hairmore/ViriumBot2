@@ -28,16 +28,7 @@ csv_file = os.getcwd() + '/database.csv'#To store info for calculating
 score_data = pd.DataFrame(columns = ["mem_id", "mem_name", "roles", "eventEngageTimes", "botUseTimes", "spamTimes", "MisbehaviorTimes", "Invites", "Followed", "InfluencerFollower", "FUD", "BadSub", "spamRepo", "score"])
 if not os.path.exists(csv_file):
     score_data.to_csv(csv_file, index=False, sep="\t")
-"""
-@com.event
-async def on_message(message):
-    We start a new round when new embed pops out in WHITELIST_CHANNEL 
-    global counter
-    if message.channel.id == 940756444486205490:
-        if "round of whitelist starts" in message.content:
-            counter = 0
-    await com.process_commands(message)
-"""
+
 @slash.slash(
     name = "whitelist_number",
     description = "Launch when a new round is started",
@@ -74,143 +65,144 @@ async def round_start(context, number:int, round:int):
 async def SCORE(cmd):
     global counter, num_quota, this_round
     # Get round num through history in whitelist channeL
-    #根据首行轮次信息
-    #print(existing_data)
-    try:
-        print(counter, num_quota)
-    except NameError:
-        await cmd.send(f"{cmd.guild.get_role(TICKET_ADMIN_ROLE_ID).mention}, Please inform the bot how many whitelist will be given with command `/whitelist_number`.")
-    ##########################
-    members = cmd.guild.members
-    """Count how many invites the command giver has"""
-    csv_invite = pd.read_csv(
-        os.getcwd() + '/database_inviter.csv', 
-        sep="\t",
-        dtype = {'user_id': str,'inviter_id':str}
-    ) 
-    try:
-        invite_times = csv_invite['inviter_id'].value_counts()[str(cmd.author.id)]
-    except KeyError:
-        invite_times = 0
-    """Compare it with existing data"""
-    existing_data = pd.read_csv(csv_file, sep="\t", dtype = {'mem_id': str})
-    existing_ids = [id for id in existing_data["mem_id"].tolist()]
-    for member in members:
-        if not member.bot:
-            team_role = [936964587717263400, 935826124368404500, 947164819927236648, 935827096373186630]#origine admin senior junior
-            roles = [r.id for r in member.roles]
-            inter_set = list(set(team_role)&set(roles))
-            if len(inter_set) == 0:
-                dic_data = {}
-                if str(member.id) not in existing_ids:
-                    #If someone new enters our server
-                    dic_data["mem_id"] = str(member.id)
-                    dic_data["mem_name"] = member.name
-                    dic_data["roles"] = [str(role.id) for role in member.roles]
-                    dic_data["eventEngageTimes"] = 0
-                    dic_data["botUseTimes"] = 0
-                    dic_data["spamTimes"] = 0
-                    dic_data["MisbehaviorTimes"] = 0
-                    dic_data["Invites"] = invite_times
-                    dic_data["Followed"] = "No"
-                    dic_data["InfluencerFollower"] = 0
-                    dic_data["FUD"] = 0              
-                    dic_data["BadSub"] = 0    
-                    dic_data["spamRepo"] = 0               
-                    dic_data["score"] = 0
-                    existing_data = existing_data.append([dic_data], ignore_index=True)
-                else:
-                    #We update current info
-                    index_ = existing_ids.index(str(member.id))
-                    existing_data.iloc[index_, 2] = str(list([role.id for role in member.roles]))
-                    existing_data.iloc[index_, 7] = invite_times
+    if counter < num_quota:
+        try:
+            print(counter, num_quota)
+        except NameError:
+            await cmd.send(f"{cmd.guild.get_role(TICKET_ADMIN_ROLE_ID).mention}, Please inform the bot how many whitelist will be given with command `/whitelist_number`.")
+        ##########################
+        members = cmd.guild.members
+        """Count how many invites the command giver has"""
+        csv_invite = pd.read_csv(
+            os.getcwd() + '/database_inviter.csv', 
+            sep="\t",
+            dtype = {'user_id': str,'inviter_id':str}
+        ) 
+        try:
+            invite_times = csv_invite['inviter_id'].value_counts()[str(cmd.author.id)]
+        except KeyError:
+            invite_times = 0
+        """Compare it with existing data"""
+        existing_data = pd.read_csv(csv_file, sep="\t", dtype = {'mem_id': str})
+        existing_ids = [id for id in existing_data["mem_id"].tolist()]
+        for member in members:
+            if not member.bot:
+                team_role = [936964587717263400, 935826124368404500, 947164819927236648, 935827096373186630]#origine admin senior junior
+                roles = [r.id for r in member.roles]
+                inter_set = list(set(team_role)&set(roles))
+                if len(inter_set) == 0:
+                    dic_data = {}
+                    if str(member.id) not in existing_ids:
+                        #If someone new enters our server
+                        dic_data["mem_id"] = str(member.id)
+                        dic_data["mem_name"] = member.name
+                        dic_data["roles"] = [str(role.id) for role in member.roles]
+                        dic_data["eventEngageTimes"] = 0
+                        dic_data["botUseTimes"] = 0
+                        dic_data["spamTimes"] = 0
+                        dic_data["MisbehaviorTimes"] = 0
+                        dic_data["Invites"] = invite_times
+                        dic_data["Followed"] = "No"
+                        dic_data["InfluencerFollower"] = 0
+                        dic_data["FUD"] = 0              
+                        dic_data["BadSub"] = 0    
+                        dic_data["spamRepo"] = 0               
+                        dic_data["score"] = 0
+                        existing_data = existing_data.append([dic_data], ignore_index=True)
+                    else:
+                        #We update current info
+                        index_ = existing_ids.index(str(member.id))
+                        existing_data.iloc[index_, 2] = str(list([role.id for role in member.roles]))
+                        existing_data.iloc[index_, 7] = invite_times
 
-    existing_data.to_csv(csv_file, index=False, sep='\t')
-        
-    updated_data = pd.read_csv(csv_file, sep="\t", dtype = {'mem_id': str})
-    for index, row in updated_data.iterrows():
-        #Calculation based on role names
-        role_name = row["roles"]
-        score = 0
-        if "943990732342067281" in role_name:
-            """LEVEL 10"""
-            score += 10
-        if "943990968020004924" in role_name:
-            """LEVEL 15"""
-            score += 15
-        if "943991189936406589" in role_name:
-            """LEVEL 25"""
-            score += 25
-        if "947631016175075360" in role_name:
-            """community star"""
-            score += 5
-        if "947630666965741599" in role_name:
-            "Insightful holder"
-            score += 5
-        if "943652898200518666" in role_name:
-            """Crypto whale"""
-            score += 10
-        if "943514565289861132" in role_name:
-            """CRYPTO Collector"""
-            score += 5
-        if "947630139167088661" in role_name:
-            """Contest Winner"""
-            score += 10
-        if "947837103092424754" in role_name:
-            """Event Winner"""
-            score += 10
-        if "947341631605047357" in role_name:
-            score += 2
-        #Calculation based on invite
-        invit = row['Invites']
-        score += invit//5 #Every 5 invites gets 1p
-        #if the user has followed us
-        fol = row["Followed"]
-        if fol == "Yes":
-            score += 0.5
-        #For influencer
-        follower_num = row["InfluencerFollower"]
-        score += follower_num
-        #Contest and event engagement
-        CE = row["eventEngageTimes"]
-        score += CE
-        #spam reporter
-        sr = row["spamRepo"]
-        score += sr*0.5
-        ################################### Panishment #################################
-        #For spam
-        spam = row["spamTimes"]
-        score -= spam
-        #For bot use
-        bot = row["botUseTimes"]
-        score -= bot*5
-        #For Misbehavior
-        misb = row["MisbehaviorTimes"]
-        score -= misb*5
-        #For FUD
-        fud = row["FUD"]
-        score -= fud*10
-        #For badSub
-        badSub = row["BadSub"]
-        score -= badSub*5
+        existing_data.to_csv(csv_file, index=False, sep='\t')
+            
+        updated_data = pd.read_csv(csv_file, sep="\t", dtype = {'mem_id': str})
+        for index, row in updated_data.iterrows():
+            #Calculation based on role names
+            role_name = row["roles"]
+            score = 0
+            if "943990732342067281" in role_name:
+                """LEVEL 10"""
+                score += 10
+            if "943990968020004924" in role_name:
+                """LEVEL 15"""
+                score += 15
+            if "943991189936406589" in role_name:
+                """LEVEL 25"""
+                score += 25
+            if "947631016175075360" in role_name:
+                """community star"""
+                score += 5
+            if "947630666965741599" in role_name:
+                "Insightful holder"
+                score += 5
+            if "943652898200518666" in role_name:
+                """Crypto whale"""
+                score += 10
+            if "943514565289861132" in role_name:
+                """CRYPTO Collector"""
+                score += 5
+            if "947630139167088661" in role_name:
+                """Contest Winner"""
+                score += 10
+            if "947837103092424754" in role_name:
+                """Event Winner"""
+                score += 10
+            if "947341631605047357" in role_name:
+                score += 2
+            #Calculation based on invite
+            invit = row['Invites']
+            score += invit//5 #Every 5 invites gets 1p
+            #if the user has followed us
+            fol = row["Followed"]
+            if fol == "Yes":
+                score += 0.5
+            #For influencer
+            follower_num = row["InfluencerFollower"]
+            score += follower_num
+            #Contest and event engagement
+            CE = row["eventEngageTimes"]
+            score += CE
+            #spam reporter
+            sr = row["spamRepo"]
+            score += sr*0.5
+            ################################### Panishment #################################
+            #For spam
+            spam = row["spamTimes"]
+            score -= spam
+            #For bot use
+            bot = row["botUseTimes"]
+            score -= bot*5
+            #For Misbehavior
+            misb = row["MisbehaviorTimes"]
+            score -= misb*5
+            #For FUD
+            fud = row["FUD"]
+            score -= fud*10
+            #For badSub
+            badSub = row["BadSub"]
+            score -= badSub*5
 
-        """Update score"""
-        updated_data.iloc[index, 13] = score
+            """Update score"""
+            updated_data.iloc[index, 13] = score
 
-         #Give role whitelist if they have 25 points
-        if counter < num_quota:
-            if score >= THRESHOLD_SCORE:
-                if "946544609511735336" not in role_name:
-                    """Whitelist winner"""
-                    var = cmd.guild.get_role(WHITELIST_WINNER_ROLE_ID)
-                    winner = cmd.guild.get_member(int(row["mem_id"]))
-                    await winner.add_roles(var)
-                    counter+=1
-                    print(counter, winner.name)
-        
+            #Give role whitelist if they have 25 points
+            if counter <=num_quota:
+                if score >= THRESHOLD_SCORE:
+                    if "946544609511735336" not in role_name:
+                        """Whitelist winner"""
+                        var = cmd.guild.get_role(WHITELIST_WINNER_ROLE_ID)
+                        winner = cmd.guild.get_member(int(row["mem_id"]))
+                        await winner.add_roles(var)
+                        counter+=1
 
-    updated_data.to_csv(csv_file, index=False, sep='\t')
-        
+        updated_data.to_csv(csv_file, index=False, sep='\t')      
+    
+    else:
+        await cmd.send(f"Whitelist round {this_round} ended.")
+        updated_data = pd.read_csv(csv_file, sep="\t", dtype = {'mem_id': str})
+    
     """Sort by score"""
     tobeRank_data = updated_data[-updated_data['roles'].isin(["946544609511735336"])]
     tobeRank_data["ranks"] = tobeRank_data["score"].rank(method="min", ascending=False) #adding a new column "rank" to dataframe
@@ -218,8 +210,16 @@ async def SCORE(cmd):
     author_index = tobeRank_data[tobeRank_data.mem_id == str(cmd.author.id)].index.tolist()[0]
     rank = tobeRank_data.iloc[author_index, 14]
     score_author = tobeRank_data.iloc[author_index, 13]
-    result = "Congrats {0}! Your score is {1}, and your rank is {2}".format(str(cmd.author).split("#")[0], str(score_author), str(int(rank)))
-    embedVar = discord.Embed(title="Whitelist score!!!", description=result, color=0x00ff00)
+    if rank == 1:
+        result = "Congrats {0}! Your score is {1}, and your rank is {2}🥇.".format(str(cmd.author).split("#")[0], str(score_author), str(int(rank)))
+    elif rank == 2:
+        result = "Congrats {0}! Your score is {1}, and your rank is {2}🥈.".format(str(cmd.author).split("#")[0], str(score_author), str(int(rank)))
+    elif rank == 3:
+        result = "Congrats {0}! Your score is {1}, and your rank is {2}🥉.".format(str(cmd.author).split("#")[0], str(score_author), str(int(rank)))
+    else:
+        result = "Congrats {0}! Your score is {1}, and your rank is {2}🏅.".format(str(cmd.author).split("#")[0], str(score_author), str(int(rank)))
+
+    embedVar = discord.Embed(title="🎖 WHITELIST SCORE 🎖", description=result, color=0x00ff00)
     embedVar.set_author(name=cmd.author.display_name,  icon_url=cmd.author.avatar_url)
     embedVar.set_image(url="https://d1fmx1rbmqrxrr.cloudfront.net/cnet/optim/i/edit/2021/12/NFT-tout-savoir-big__w770.jpg")
 

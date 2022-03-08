@@ -539,7 +539,6 @@ async def fud(context, user:Optional[discord.User], fud_times:int, fud_message_i
         await context.send(f'{context.author.mention}, wrong person is selected', delete_after = 5.0)
 
 ##################################################### Unrelated sub #####################################################
-
 @slash.slash(
     name = "badsub",
     description = "For unrelated submission",
@@ -617,7 +616,6 @@ async def badsub(context, user:Optional[discord.User], badsub_times:int, bad_sub
         await context.send(f'{context.author.mention}, wrong person is selected', delete_after = 5.0)
 
 ##################################################### Get score rank #####################################################
-
 @slash.slash(
     name = "userank",
     description = "Get single user's rank and score",
@@ -633,257 +631,25 @@ async def badsub(context, user:Optional[discord.User], badsub_times:int, bad_sub
         ]
     )
 @commands.has_role(TICKET_MOD_ROLE_ID)
-async def userank(cmd, user:Optional[discord.User]):
-    members = cmd.guild.members
-    data_all_new = []
+async def userank(cmd, user:Optional[discord.Member]):
     csv_file = os.getcwd() + '/database.csv'#To store info for calculating
     """Count how many invites the command giver has"""
-    csv_invite = pd.read_csv(
-        os.getcwd() + '/database_inviter.csv', 
-        sep="\t",
-        dtype = {'user_id': str,'inviter_id':str}
-    ) 
-    try:
-        invite_times = csv_invite['inviter_id'].value_counts()[str(cmd.author.id)]
-    except KeyError:
-        invite_times = 0
-
-    
-    if not os.path.exists(csv_file):
-        """
-        When the database doesn't exist, we create a new one
-        """
-        #os.makedirs(folder)
-        for member in members:
-            if not member.bot:
-                dic_data = {}
-                dic_data["mem_id"] = str(member.id) #0
-                dic_data["mem_name"] = member.name  #1
-                dic_data["roles"] = [role.id for role in member.roles] #2
-                dic_data["eventEngageTimes"] = 0 #3
-                dic_data["botUseTimes"] = 0      #4
-                dic_data["spamTimes"] = 0        #5
-                dic_data["MisbehaviorTimes"] = 0 #6
-                dic_data["Invites"] = invite_times #7
-                dic_data["Followed"] = "No"      #8
-                dic_data["InfluencerFollower"] = 0 #9
-                dic_data["FUD"] = 0              #10
-                dic_data["BadSub"] = 0           #11
-                dic_data["spamRepo"] = 0         #12
-                dic_data["score"] = 0            #13
-                data_all_new.append(dic_data)
-        df_new = pd.DataFrame(data_all_new, columns = ["mem_id", "mem_name", "roles", "eventEngageTimes", "botUseTimes", "spamTimes", "MisbehaviorTimes", "Invites", "Followed", "InfluencerFollower", "FUD", "BadSub", "spamRepo", "score"])
-        df_new.to_csv(csv_file, index=False, sep='\t')
-    
-    else:
-        """Compare it with existing data"""
-        existing_data = pd.read_csv(csv_file, sep="\t", dtype = {'mem_id': str})
-        existing_ids = [id for id in existing_data["mem_id"].tolist()]
-        for member in members:
-            if not member.bot:
-                dic_data = {}
-                if str(member.id) not in existing_ids:
-                    dic_data["mem_id"] = str(member.id)
-                    dic_data["mem_name"] = member.name
-                    dic_data["roles"] = [role.id for role in member.roles]
-                    dic_data["eventEngageTimes"] = 0
-                    dic_data["botUseTimes"] = 0
-                    dic_data["spamTimes"] = 0
-                    dic_data["MisbehaviorTimes"] = 0
-                    dic_data["Invites"] = invite_times
-                    dic_data["Followed"] = "No"
-                    dic_data["InfluencerFollower"] = 0
-                    dic_data["FUD"] = 0              
-                    dic_data["BadSub"] = 0    
-                    dic_data["spamRepo"] = 0               
-                    dic_data["score"] = 0
-                    existing_data = existing_data.append([dic_data], ignore_index=True)
-                else:
-                    index_ = existing_ids.index(str(member.id))
-                    existing_data.iloc[index_, 2] = str(list([role.id for role in member.roles]))
-                    existing_data.iloc[index_, 7] = invite_times
-
-        existing_data.to_csv(csv_file, index=False, sep='\t')
-               
     updated_data = pd.read_csv(csv_file, sep="\t", dtype = {'mem_id': str})
-    for index, row in updated_data.iterrows():
-        #Calculation based on role names
-        role_name = row["roles"]
-        score = 0
-        if "943990732342067281" in role_name:
-            """LEVEL 10"""
-            score += 10
-        if "943990968020004924" in role_name:
-            """LEVEL 15"""
-            score += 15
-        if "943991189936406589" in role_name:
-            """LEVEL 25"""
-            score += 25
-        if "947631016175075360" in role_name:
-            """community star"""
-            score += 5
-        if "947630666965741599" in role_name:
-            "Insightful holder"
-            score += 5
-        if "943652898200518666" in role_name:
-            """Crypto whale"""
-            score += 10
-        if "943514565289861132" in role_name:
-            """CRYPTO Collector"""
-            score += 5
-        if "947630139167088661" in role_name:
-            """Contest Winner"""
-            score += 10
-        if "947837103092424754" in role_name:
-            """Event Winner"""
-            score += 10
-        if "947341631605047357" in role_name:
-            score += 2
-        #Calculation based on invite
-        invit = row['Invites']
-        score += invit//5 #Every 5 invites gets 1p
-        #if the user has followed us
-        fol = row["Followed"]
-        if fol == "Yes":
-            score += 0.5
-        #For influencer
-        follower_num = row["InfluencerFollower"]
-        score += follower_num
-        #Contest and event engagement
-        CE = row["eventEngageTimes"]
-        score += CE
-        #spam reporter
-        sr = row["spamRepo"]
-        score += sr*0.5
-        ################################### Panishment #################################
-        #For spam
-        spam = row["spamTimes"]
-        score -= spam
-        #For bot use
-        bot = row["botUseTimes"]
-        score -= bot*5
-        #For Misbehavior
-        misb = row["MisbehaviorTimes"]
-        score -= misb*5
-        #For FUD
-        fud = row["FUD"]
-        score -= fud*10
-        #For badSub
-        badSub = row["BadSub"]
-        score -= badSub*5
-
-        """Update score"""
-        updated_data.iloc[index, 13] = score
-
-         #Give role whitelist if they have 25 points
-        if score >= THRESHOLD_SCORE:
-            if "Whitelist Winner" not in role_name:
-                var = discord.utils.get(cmd.guild.roles, name = "Whitelist Winner")
-                winner = cmd.guild.get_member(int(row["mem_id"]))
-                await winner.add_roles(var)
-
-    updated_data.to_csv(csv_file, index=False, sep='\t')
-        
-    """Sort by score"""
-    updated_data["ranks"] = updated_data["score"].rank(method="min", ascending=False) #adding a new column "rank" to dataframe
-
-    author_index = updated_data[updated_data.mem_id == str(user.id)].index.tolist()[0]
-    rank = updated_data.iloc[author_index, 14]
-    score_author = updated_data.iloc[author_index, 13]    
-    await cmd.send(f'The score of {user.name} is {score_author}, ranks {str(int(rank))}.')
-
-##################################################### Get first xx rank #####################################################
-@slash.slash(
-    name = "winner_by_rank",
-    description = "Give the first 10 member whitelist",
-    guild_ids = [SERVER_ID], #server id
-    options = [
-        create_option(
-            name = "number_of_winner",
-            description = "Add 1 to record",
-            required = True,
-            option_type = 4, #type is int
-        )
-        ]
-    )
-@commands.has_role(TICKET_MOD_ROLE_ID)
-async def whitelistWinnerGiver(context, number_of_winner:int):
-    """the name of the second argument has to be identical with the value of 'name' in create_option """
-    sub_data = pd.read_csv(csv_file, sep="\t", dtype = {'mem_id': str})
-    for index, row in sub_data.iterrows():
-        #Calculation based on role names
-        role_name = row["roles"]
-        print(role_name)
-        score = 0
-        if "LEVEL 10" in role_name:
-            score += 10
-        if "LEVEL 15" in role_name:
-            score += 15
-        if "LEVEL 25" in role_name:
-            score += 25
-        if "community star" in role_name:
-            score += 5
-        if "Insightful holder" in role_name:
-            score += 5
-        if "Crypto whales" in role_name:
-            score += 10
-        if "Crypto collector" in role_name:
-            score += 5
-        if "Participant" in role_name:
-            score += 1
-        if "Contest Winner" in role_name:
-            score += 10
-        if "Event Winner" in role_name:
-            score += 10
-        if "Server boost" in role_name:
-            score += 2
-        #Calculation based on invite
-        invit = row['Invites']
-        score += invit//5 #Every 5 invites gets 1p
-        #if the user has followed us
-        fol = row["Followed"]
-        if fol == "Yes":
-            score += 0.5
-        #For influencer
-        follower_num = row["InfluencerFollower"]
-        score += follower_num
-        #Contest and event engagement
-        CE = row["eventEngageTimes"]
-        score += CE
-        #spam reporter
-        sr = row["spamRepo"]
-        score += sr*0.5
-        ################################### Panishment #################################
-        #For spam
-        spam = row["spamTimes"]
-        score -= spam
-        #For bot use
-        bot = row["botUseTimes"]
-        score -= bot*5
-        #For Misbehavior
-        misb = row["MisbehaviorTimes"]
-        score -= misb*5
-        #For FUD
-        fud = row["FUD"]
-        score -= fud*10
-        #For badSub
-        badSub = row["BadSub"]
-        score -= badSub*5
-
-        """Update score"""
-        sub_data.iloc[index, 13] = score
-    sub_data.to_csv(csv_file, index=False, sep='\t')
-    sub_data["ranks"] = sub_data["score"].rank(method="min", ascending=False) #adding a new column "rank" to dataframe
-    slice_data = sub_data.sort_values(by='ranks').head(number_of_winner)
-    print(sub_data)
-    #give role whitelist winner to them
-    for index, row in slice_data.iterrows():
-        var = discord.utils.get(context.guild.roles, name = "Whitelist Winner")
-        winner = context.guild.get_member(int(row["mem_id"]))
-        print(winner)
-        await winner.add_roles(var)
-    
-    await context.send(f"Role <<Whitelist Winner>> is given to our top {number_of_winner} users !!!")
+    role_ids = [r.id for r in user.roles]
+    team_role = [936964587717263400, 935826124368404500, 947164819927236648, 935827096373186630]#origine admin senior junior
+    inter_set = list(set(team_role)&set(role_ids))
+    if len(inter_set) == 0:
+        """Sort by score"""
+        updated_data["ranks"] = updated_data["score"].rank(method="min", ascending=False) #adding a new column "rank" to dataframe
+        try:
+            author_index = updated_data[updated_data.mem_id == str(user.id)].index.tolist()[0]
+        except IndexError:
+            cmd.send(f'Something went wrong, {user.name} is not in our database.')
+        rank = updated_data.iloc[author_index, 14]
+        score_author = updated_data.iloc[author_index, 13]    
+        await cmd.send(f'The score of {user.name} is {score_author}, ranks {str(int(rank))}.')
+    else:
+        await cmd.send('No Team Member for whitelist competition.')
 
 ##################################################### Start whitelist round #####################################################
 @slash.slash(
