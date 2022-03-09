@@ -34,7 +34,7 @@ if not os.path.exists(csv_monitor):
 ##################################################### Followers ##################################################### 
 @slash.slash(
     name = "Follower",
-    description = "record how many follower an influencer has",
+    description = "If the users has followed us or not and on which social media",
     guild_ids = [SERVER_ID], #server id
     options = [
         create_option(
