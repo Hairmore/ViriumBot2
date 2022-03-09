@@ -151,13 +151,15 @@ async def SCORE(cmd):
                 score += 10
             if "947341631605047357" in role_name:
                 score += 2
+            if "950764055155576882" in role_name:
+                """ins follower"""
+                score += 0.5
+            if "947313068185116682" in role_name:
+                """twitter follower"""
+                score += 0.5
             #Calculation based on invite
             invit = row['Invites']
             score += invit//5 #Every 5 invites gets 1p
-            #if the user has followed us
-            fol = row["Followed"]
-            if fol == "Yes":
-                score += 0.5
             #For influencer
             follower_num = row["InfluencerFollower"]
             score += follower_num
