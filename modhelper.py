@@ -57,6 +57,10 @@ if not os.path.exists(csv_monitor):
                 create_choice(
                     name = "twitter",
                     value = "twitter"
+                ),
+                create_choice(
+                    name = "twitter and ins",
+                    value = "twitter and ins"
                 )
             ]
         )
@@ -89,6 +93,20 @@ async def follower(context, user:Optional[discord.Member], social_media_is):
             m = await context.send(f'{var.name} is attached to your account now, 0.5 point will be added :).')
         else: 
             await context.send(f"{user.mention}You've already followed us on Twitter")
+            
+    if social_media_is == "twitter and ins":
+        if 947313068185116682 not in roles_not_modBot:
+            var = context.guild.get_role(947313068185116682)
+            await user.add_roles(var)
+            m = await context.send(f'{var.name} is attached to your account now, 0.5 point will be added :).')
+        else: 
+            await context.send(f"{user.mention}You've already followed us on Twitter")
+        if 950764055155576882 not in roles_not_modBot:
+            var = context.guild.get_role(950764055155576882)
+            await user.add_roles(var)
+            m = await context.send(f'{var.name} is attached to your account now, 0.5 point will be added :).')
+        else: 
+            await context.send(f"{user.mention}You've already followed us on Ins")
 
     
     c_mod = {}
