@@ -122,6 +122,9 @@ async def SCORE(cmd):
             #Calculation based on role names
             role_name = row["roles"]
             score = 0
+            if "936964587717263400" in role_name:
+                """OG"""
+                score += 10
             if "943990732342067281" in role_name:
                 """LEVEL 10"""
                 score += 10
