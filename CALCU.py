@@ -63,6 +63,7 @@ async def round_start(context, number:int, round:int):
 
 @com.command()
 async def SCORE(cmd):
+    await cmd.send("workinb")
     global counter, num_quota, this_round
     # Get round num through history in whitelist channeL
     if counter < num_quota:
