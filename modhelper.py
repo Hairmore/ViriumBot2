@@ -678,14 +678,14 @@ async def userank(cmd, user:Optional[discord.Member]):
     options = [
         create_option(
             name = "round",
-            description = "choose a user",
+            description = "Number of times of this round",
             required=True,
             option_type = 4 #type 4 is int
             )
         ]
     )
-@commands.has_any_role('Senior Mod', 'Junior Mod')
-async def round_start(context, round:int):
+@commands.has_any_role(TICKET_MOD_ROLE_ID, ADMIN_MOD_ROLE_ID, SENIOR_MOD_ROLE_ID)
+async def start_whitelist_round(context, round:int):
     COUNTER = 0
     global NUM_QUOTA
     print("hi1")
