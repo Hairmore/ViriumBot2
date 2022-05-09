@@ -704,7 +704,6 @@ async def start_whitelist_round(context, round:int):
                     await winner.add_roles(var)
                     COUNTER += 1
 
-    await context.send("woeking")
     influen_channel = context.guild.get_channel(947304816768581642)
     contest_channel = context.guild.get_channel(947162400589750346)
     collab = context.guild.get_channel(947523081621082212)
@@ -712,7 +711,9 @@ async def start_whitelist_round(context, round:int):
     just_level_up = context.guild.get_channel(941798257925951488)
     rules = context.guild.get_channel(941067664179204156)
     link = context.guild.get_channel(939854436120014878)
+    await context.send("woeking1111")
     if round == 1:
+        await context.send("woeking")
         message = f""" 
         >>> Hello @everyone, the **FIRST** round of whitelist starts.
 
