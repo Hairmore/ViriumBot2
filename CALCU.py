@@ -9,7 +9,7 @@ import os
 import numpy as np
 import re
 
-THRESHOLD_SCORE = 10
+THRESHOLD_SCORE = 25
 WHITELIST_ROUND = 4 
 SERVER_ID =923145834890145802
 TICKET_ADMIN_ROLE_ID = 935826124368404500 #Admins have the right to start a new round
@@ -225,7 +225,7 @@ async def SCORE(cmd):
     else:
         result = "Congrats {0}! Your score is {1}, and your rank is {2}🏅.".format(str(cmd.author).split("#")[0], str(score_author), str(int(rank)))
 
-    embedVar = discord.Embed(title="🎖 WHITELIST SCORE 🎖", description=result, color=0x00ff00)
+    embedVar = discord.Embed(title="🎖 WHITELIST SCORE 🎖", description=result, color=0xD7BA99)
     embedVar.set_author(name=cmd.author.display_name,  icon_url=cmd.author.avatar_url)
     embedVar.set_image(url="https://d1fmx1rbmqrxrr.cloudfront.net/cnet/optim/i/edit/2021/12/NFT-tout-savoir-big__w770.jpg")
 
