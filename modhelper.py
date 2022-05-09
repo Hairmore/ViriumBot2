@@ -20,7 +20,8 @@ bot_token = os.environ['MOD_HELPER']
 
 #v:
 SERVER_ID =923145834890145802
-TICKET_MOD_ROLE_ID = 935827096373186630
+ADMIN_MOD_ROLE_ID = 935826124368404500 #ADMIN
+TICKET_MOD_ROLE_ID = 935827096373186630 #Junior mod
 SENIOR_MOD_ROLE_ID = 947164819927236648
 
 
@@ -283,7 +284,7 @@ async def giverole(context, user:Optional[discord.User], role:str):
         )
         ]
     )
-@commands.has_role(TICKET_MOD_ROLE_ID)
+@commands.has_any_role(TICKET_MOD_ROLE_ID, ADMIN_MOD_ROLE_ID, SENIOR_MOD_ROLE_ID)
 async def spam(context, user:Optional[discord.User], spam_times:int, spam_message_id: str):
     #We get the spam message
     if spam_message_id != "DM":
@@ -683,7 +684,7 @@ async def userank(cmd, user:Optional[discord.Member]):
             )
         ]
     )
-@commands.has_role(TICKET_MOD_ROLE_ID)
+@commands.has_any_role(TICKET_MOD_ROLE_ID, SENIOR_MOD_ROLE_ID)
 async def round_start(context, round:int):
     COUNTER = 0
     global NUM_QUOTA
