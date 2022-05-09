@@ -712,6 +712,10 @@ async def start_whitelist_round(context, round:int):
     rules = context.guild.get_channel(941067664179204156)
     link = context.guild.get_channel(939854436120014878)
     if round == 1:
+        message = "YES"
+        await context.send("working####1111")
+        await context.send(message)
+        await context.send("working1111")
         message = f""" 
         >>> Hello @everyone, the **FIRST** round of whitelist starts.
 
@@ -738,9 +742,9 @@ async def start_whitelist_round(context, round:int):
        🚧  Send spams ⛔️ **1 point** taken per spam
         """
         message = "YES"
-        await context.send("working####)
+        await context.send("working####")
         await context.send(message)
-        await context.send("working)
+        await context.send("working")
         
     else:
         dic = {2:"SECOND", 3:"THIRD", 4:"LAST"}
