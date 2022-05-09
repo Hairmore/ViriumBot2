@@ -684,7 +684,7 @@ async def userank(cmd, user:Optional[discord.Member]):
             )
         ]
     )
-@commands.has_any_role(TICKET_MOD_ROLE_ID, SENIOR_MOD_ROLE_ID)
+@commands.has_any_role('Senior Mod', 'Junior Mod')
 async def round_start(context, round:int):
     COUNTER = 0
     global NUM_QUOTA
