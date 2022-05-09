@@ -684,8 +684,9 @@ async def userank(cmd, user:Optional[discord.Member]):
             )
         ]
     )
-@commands.has_any_role(TICKET_MOD_ROLE_ID, ADMIN_MOD_ROLE_ID, SENIOR_MOD_ROLE_ID)
+@commands.has_role(ADMIN_MOD_ROLE_ID)
 async def start_whitelist_round(context, round:int):
+    await context.send("woeking")
     COUNTER = 0
     global NUM_QUOTA
     print("hi1")
