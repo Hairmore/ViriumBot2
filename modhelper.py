@@ -686,7 +686,6 @@ async def userank(cmd, user:Optional[discord.Member]):
     )
 @commands.has_role(ADMIN_MOD_ROLE_ID)
 async def start_whitelist_round(context, round:int):
-    await context.send("woeking")
     COUNTER = 0
     global NUM_QUOTA
     print("hi1")
@@ -705,7 +704,7 @@ async def start_whitelist_round(context, round:int):
                     await winner.add_roles(var)
                     COUNTER += 1
 
-
+    await context.send("woeking")
     influen_channel = context.guild.get_channel(947304816768581642)
     contest_channel = context.guild.get_channel(947162400589750346)
     collab = context.guild.get_channel(947523081621082212)
