@@ -737,7 +737,10 @@ async def start_whitelist_round(context, round:int):
        🚧  Send unrelated submission ⛔️ **5 point ** taken per unrelated submission
        🚧  Send spams ⛔️ **1 point** taken per spam
         """
-       await context.send(message)
+        await context.send("working####)
+        await context.send(message)
+        await context.send("working)
+        
     else:
         dic = {2:"SECOND", 3:"THIRD", 4:"LAST"}
         times = dic[round]
