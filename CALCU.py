@@ -115,6 +115,7 @@ async def SCORE(cmd):
                         index_ = existing_ids.index(str(member.id))
                         existing_data.iloc[index_, 2] = str(list([role.id for role in member.roles]))
                         existing_data.iloc[index_, 7] = invite_times
+                        existing_data.iloc[index_, 14] = [role.name for role in member.roles]
 
         existing_data.to_csv(csv_file, index=False, sep='\t')
             
@@ -211,7 +212,6 @@ async def SCORE(cmd):
         updated_data = pd.read_csv(csv_file, sep="\t", dtype = {'mem_id': str})
     
     """Sort by score"""
-    await cmd.send(updated_data[["mem_name"]])
     await cmd.send(updated_data[["roles_name"]])
     
     tobeRank_data = updated_data[~updated_data["roles_name"].isin(["Whitelist Winner"])]
