@@ -209,6 +209,7 @@ async def SCORE(cmd):
         updated_data.to_csv(csv_file, index=False, sep='\t')      
     
     else:
+        await cmd.send("no name")
         try:
             print(counter, num_quota)
         except NameError:
