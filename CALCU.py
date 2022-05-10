@@ -25,7 +25,7 @@ slash = SlashCommand(com, sync_commands=True)
 
 csv_file = os.getcwd() + '/database.csv'#To store info for calculating
 
-score_data = pd.DataFrame(columns = ["mem_id", "mem_name", "roles", "eventEngageTimes", "botUseTimes", "spamTimes", "MisbehaviorTimes", "Invites", "Followed", "InfluencerFollower", "FUD", "BadSub", "spamRepo", "score"])
+score_data = pd.DataFrame(columns = ["mem_id", "mem_name", "roles", "eventEngageTimes", "botUseTimes", "spamTimes", "MisbehaviorTimes", "Invites", "Followed", "InfluencerFollower", "FUD", "BadSub", "spamRepo", "score", "roles_name"])
 if not os.path.exists(csv_file):
     score_data.to_csv(csv_file, index=False, sep="\t")
 
@@ -108,6 +108,7 @@ async def SCORE(cmd):
                         dic_data["BadSub"] = 0    
                         dic_data["spamRepo"] = 0               
                         dic_data["score"] = 0
+                        dic_data["roles_name"] = [role.name for role in member.roles]
                         existing_data = existing_data.append([dic_data], ignore_index=True)
                     else:
                         #We update current info
@@ -210,12 +211,12 @@ async def SCORE(cmd):
         updated_data = pd.read_csv(csv_file, sep="\t", dtype = {'mem_id': str})
     
     """Sort by score"""
-    tobeRank_data = updated_data[updated_data.roles.isin(["946544609511735336"])]
+    tobeRank_data = updated_data[~updated_data.roles_name.isin(["Whitelist Winner"])]
     await cmd.send(tobeRank_data)
     tobeRank_data["ranks"] = tobeRank_data["score"].rank(method="min", ascending=False) #adding a new column "rank" to dataframe
 
     author_index = tobeRank_data[tobeRank_data.mem_id == str(cmd.author.id)].index.tolist()[0]
-    rank = tobeRank_data.iloc[author_index, 14]
+    rank = tobeRank_data.iloc[author_index, 15]
     score_author = tobeRank_data.iloc[author_index, 13]
     if rank == 1:
         result = "Congrats {0}! Your score is {1}, and your rank is {2}🥇.".format(str(cmd.author).split("#")[0], str(score_author), str(int(rank)))
