@@ -210,7 +210,7 @@ async def SCORE(cmd):
         updated_data = pd.read_csv(csv_file, sep="\t", dtype = {'mem_id': str})
     
     """Sort by score"""
-    tobeRank_data = updated_data[~ updated_data['roles'].str.contains(["946544609511735336"])]
+    tobeRank_data = updated_data[~updated_data['roles'].str.contains(["946544609511735336"])]
     await cmd.send(tobeRank_data)
     await cmd.send(tobeRank_data['roles'])
     tobeRank_data["ranks"] = tobeRank_data["score"].rank(method="min", ascending=False) #adding a new column "rank" to dataframe
