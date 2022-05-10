@@ -664,7 +664,7 @@ async def userank(cmd, user:Optional[discord.Member]):
             author_index = updated_data[updated_data.mem_id == str(user.id)].index.tolist()[0]
         except IndexError:
             cmd.send(f'Something went wrong, {user.name} is not in our database.')
-        rank = updated_data.iloc[author_index, 14]
+        rank = updated_data.iloc[author_index, 15]
         score_author = updated_data.iloc[author_index, 13]    
         await cmd.send(f'The score of {user.name} is {score_author}, ranks {str(int(rank))}.')
     else:
