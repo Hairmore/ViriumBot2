@@ -125,7 +125,7 @@ async def SCORE(cmd):
             #Calculation based on role names
             role_name = row["roles"]
             score = 0
-            if "936964587717263400" in role_name:
+            if "935827755055079475" in role_name:
                 """OG"""
                 score += 15
             if "943990732342067281" in role_name:
@@ -223,11 +223,11 @@ async def SCORE(cmd):
         if rank == 1:
             result = "Congrats {0}! Your score is {1}, and your rank is {2} in round {3}🥇.".format(str(cmd.author).split("#")[0], str(score_author), str(int(rank)), str(this_round))
         elif rank == 2:
-            result = "Congrats {0}! Your score is {1}, and your rank is {2} in round {3}🥈.".format(str(cmd.author).split("#")[0], str(score_author), str(int(rank)))
+            result = "Congrats {0}! Your score is {1}, and your rank is {2} in round {3}🥈.".format(str(cmd.author).split("#")[0], str(score_author), str(int(rank)), str(this_round))
         elif rank == 3:
-            result = "Congrats {0}! Your score is {1}, and your rank is {2} in round {3}🥉.".format(str(cmd.author).split("#")[0], str(score_author), str(int(rank)))
+            result = "Congrats {0}! Your score is {1}, and your rank is {2} in round {3}🥉.".format(str(cmd.author).split("#")[0], str(score_author), str(int(rank)), str(this_round))
         else:
-            result = "Congrats {0}! Your score is {1}, and your rank is {2} in round {3}🏅.".format(str(cmd.author).split("#")[0], str(score_author), str(int(rank)))
+            result = "Congrats {0}! Your score is {1}, and your rank is {2} in round {3}🏅.".format(str(cmd.author).split("#")[0], str(score_author), str(int(rank)), str(this_round))
 
         embedVar = discord.Embed(title="🎖 WHITELIST SCORE 🎖", description=result, color=0xD7BA99)
         embedVar.set_author(name=cmd.author.display_name,  icon_url=cmd.author.avatar_url)
