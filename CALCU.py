@@ -208,81 +208,25 @@ async def SCORE(cmd):
 
         updated_data.to_csv(csv_file, index=False, sep='\t')      
     
-    else:
-        await cmd.send("no name")
-        try:
-            print(counter, num_quota)
-        except NameError:
-            await cmd.send(f"{cmd.guild.get_role(TICKET_ADMIN_ROLE_ID).mention}, Please inform the bot how many whitelist will be given with command `/whitelist_number`.")
-        ##########################
-        members = cmd.guild.members
-        """Count how many invites the command giver has"""
-        csv_invite = pd.read_csv(
-            os.getcwd() + '/database_inviter.csv', 
-            sep="\t",
-            dtype = {'user_id': str,'inviter_id':str}
-        ) 
-        try:
-            invite_times = csv_invite['inviter_id'].value_counts()[str(cmd.author.id)]
-        except KeyError:
-            invite_times = 0
-        """Compare it with existing data"""
-        existing_data = pd.read_csv(csv_file, sep="\t", dtype = {'mem_id': str})
-        existing_ids = [id for id in existing_data["mem_id"].tolist()]
-        for member in members:
-            if not member.bot:
-                team_role = [936964587717263400, 935826124368404500, 947164819927236648, 935827096373186630]#origine admin senior junior
-                roles = [r.id for r in member.roles]
-                inter_set = list(set(team_role)&set(roles))
-                if len(inter_set) == 0:
-                    dic_data = {}
-                    if str(member.id) not in existing_ids:
-                        #If someone new enters our server
-                        dic_data["mem_id"] = str(member.id)
-                        dic_data["mem_name"] = member.name
-                        dic_data["roles"] = [str(role.id) for role in member.roles]
-                        dic_data["eventEngageTimes"] = 0
-                        dic_data["botUseTimes"] = 0
-                        dic_data["spamTimes"] = 0
-                        dic_data["MisbehaviorTimes"] = 0
-                        dic_data["Invites"] = invite_times
-                        dic_data["Followed"] = "No"
-                        dic_data["InfluencerFollower"] = 0
-                        dic_data["FUD"] = 0              
-                        dic_data["BadSub"] = 0    
-                        dic_data["spamRepo"] = 0               
-                        dic_data["score"] = 0
-                        dic_data["roles_name"] = [role.name for role in member.roles]
-                        existing_data = existing_data.append([dic_data], ignore_index=True)
-                    else:
-                        #We update current info
-                        index_ = existing_ids.index(str(member.id))
-                        existing_data.iloc[index_, 2] = str(list([role.id for role in member.roles]))
-                        existing_data.iloc[index_, 7] = invite_times
-                        existing_data.iloc[index_, 14] = [role.name for role in member.roles]
-                        
-        existing_data.to_csv(csv_file, index=False, sep='\t')                
+    else:              
         await cmd.send(f"Whitelist round {this_round} ended.")
         updated_data = pd.read_csv(csv_file, sep="\t", dtype = {'mem_id': str})
     
-    """Sort by score"""
-    await cmd.send(updated_data[["roles_name"]])
-    
+    """Sort by score"""    
     tobeRank_data = updated_data[~updated_data["roles_name"].isin(["Whitelist Winner"])]
-    await cmd.send(tobeRank_data)
     tobeRank_data["ranks"] = tobeRank_data["score"].rank(method="min", ascending=False) #adding a new column "rank" to dataframe
 
     author_index = tobeRank_data[tobeRank_data.mem_id == str(cmd.author.id)].index.tolist()[0]
     rank = tobeRank_data.iloc[author_index, 15]
     score_author = tobeRank_data.iloc[author_index, 13]
     if rank == 1:
-        result = "Congrats {0}! Your score is {1}, and your rank is {2}🥇.".format(str(cmd.author).split("#")[0], str(score_author), str(int(rank)))
+        result = "Congrats {0}! Your score is {1}, and your rank is {2} in round {3}🥇.".format(str(cmd.author).split("#")[0], str(score_author), str(int(rank)), str(this_round))
     elif rank == 2:
-        result = "Congrats {0}! Your score is {1}, and your rank is {2}🥈.".format(str(cmd.author).split("#")[0], str(score_author), str(int(rank)))
+        result = "Congrats {0}! Your score is {1}, and your rank is {2} in round {3}🥈.".format(str(cmd.author).split("#")[0], str(score_author), str(int(rank)))
     elif rank == 3:
-        result = "Congrats {0}! Your score is {1}, and your rank is {2}🥉.".format(str(cmd.author).split("#")[0], str(score_author), str(int(rank)))
+        result = "Congrats {0}! Your score is {1}, and your rank is {2} in round {3}🥉.".format(str(cmd.author).split("#")[0], str(score_author), str(int(rank)))
     else:
-        result = "Congrats {0}! Your score is {1}, and your rank is {2}🏅.".format(str(cmd.author).split("#")[0], str(score_author), str(int(rank)))
+        result = "Congrats {0}! Your score is {1}, and your rank is {2} in round {3}🏅.".format(str(cmd.author).split("#")[0], str(score_author), str(int(rank)))
 
     embedVar = discord.Embed(title="🎖 WHITELIST SCORE 🎖", description=result, color=0xD7BA99)
     embedVar.set_author(name=cmd.author.display_name,  icon_url=cmd.author.avatar_url)
