@@ -67,7 +67,7 @@ if not os.path.exists(csv_monitor):
         )
         ]
     )
-@commands.has_role(SENIOR_MOD_ROLE_ID)
+@commands.has_any_role(ADMIN_MOD_ROLE_ID, SENIOR_MOD_ROLE_ID)
 async def follower(context, user:Optional[discord.Member], social_media_is):
     existing_data_df = pd.read_csv(csv_monitor, sep="\t",  dtype = {'ID': str, 'Mod_id': str, "Channel_id": str, "user_id": str}, parse_dates=True)
     
@@ -152,7 +152,7 @@ async def follower(context, user:Optional[discord.Member], social_media_is):
         )
         ]
     )
-@commands.has_role(SENIOR_MOD_ROLE_ID)
+@commands.has_any_role(ADMIN_MOD_ROLE_ID, SENIOR_MOD_ROLE_ID)
 async def influencer(context, user:Optional[discord.Member], social_media_accounts:str, follower_number:int):
     existing_data_df = pd.read_csv(csv_monitor, sep="\t",  dtype = {'ID': str, 'Mod_id': str, "Channel_id": str, "user_id": str}, parse_dates=True)
     roles_not_modBot = [r.id for r in user.roles]
@@ -228,7 +228,7 @@ async def influencer(context, user:Optional[discord.Member], social_media_accoun
         ),
         ]
     )
-@commands.has_role(SENIOR_MOD_ROLE_ID)
+@commands.has_any_role(ADMIN_MOD_ROLE_ID, SENIOR_MOD_ROLE_ID)
 async def giverole(context, user:Optional[discord.User], role:str):
     # Open database
     existing_data_df = pd.read_csv(csv_monitor, sep="\t",  dtype = {'ID': str, 'Mod_id': str, "Channel_id": str, "user_id": str}, parse_dates=True)
@@ -386,7 +386,7 @@ async def spam(context, user:Optional[discord.User], spam_times:int, spam_messag
         )
         ]
     )
-@commands.has_role(TICKET_MOD_ROLE_ID)
+@commands.has_any_role(TICKET_MOD_ROLE_ID, ADMIN_MOD_ROLE_ID, SENIOR_MOD_ROLE_ID)
 async def BotFighter(context, user:Optional[discord.User], bot_use:int):
     existing_data_df = pd.read_csv(csv_monitor, sep="\t",  dtype = {'ID': str, 'Mod_id': str, "Channel_id": str, "user_id": str}, parse_dates=True)
 
@@ -448,7 +448,7 @@ async def BotFighter(context, user:Optional[discord.User], bot_use:int):
 
         ]
     )
-@commands.has_role(TICKET_MOD_ROLE_ID)
+@commands.has_any_role(TICKET_MOD_ROLE_ID, ADMIN_MOD_ROLE_ID, SENIOR_MOD_ROLE_ID)
 async def Mischief(context, user:Optional[discord.User], misbehave:int, misbehave_message_id: str):
     misbehave_mssage = await context.channel.fetch_message(misbehave_message_id)
     existing_data_df = pd.read_csv(csv_monitor, sep="\t",  dtype = {'ID': str, 'Mod_id': str, "Channel_id": str, "user_id": str}, parse_dates=True)
@@ -521,7 +521,7 @@ async def Mischief(context, user:Optional[discord.User], misbehave:int, misbehav
         ),
         ]
     )
-@commands.has_role(TICKET_MOD_ROLE_ID)
+@commands.has_any_role(TICKET_MOD_ROLE_ID, ADMIN_MOD_ROLE_ID, SENIOR_MOD_ROLE_ID)
 async def fud(context, user:Optional[discord.User], fud_times:int, fud_message_id:str):
     fud_mssage = await context.channel.fetch_message(fud_message_id)
     existing_data_df = pd.read_csv(csv_monitor, sep="\t",  dtype = {'ID': str, 'Mod_id': str, "Channel_id": str, "user_id": str}, parse_dates=True)
@@ -591,7 +591,7 @@ async def fud(context, user:Optional[discord.User], fud_times:int, fud_message_i
         )
         ]
     )
-@commands.has_role(TICKET_MOD_ROLE_ID)
+@commands.has_any_role(TICKET_MOD_ROLE_ID, ADMIN_MOD_ROLE_ID, SENIOR_MOD_ROLE_ID)
 async def badsub(context, user:Optional[discord.User], badsub_times:int, bad_submission_message_id:str):
     bad_sub_mssage = await context.channel.fetch_message(bad_submission_message_id)
     existing_data_df = pd.read_csv(csv_monitor, sep="\t",  dtype = {'ID': str, 'Mod_id': str, "Channel_id": str, "user_id": str}, parse_dates=True)
@@ -649,7 +649,7 @@ async def badsub(context, user:Optional[discord.User], badsub_times:int, bad_sub
             )
         ]
     )
-@commands.has_role(TICKET_MOD_ROLE_ID)
+@commands.has_any_role(TICKET_MOD_ROLE_ID, ADMIN_MOD_ROLE_ID, SENIOR_MOD_ROLE_ID)
 async def userank(cmd, user:Optional[discord.Member]):
     csv_file = os.getcwd() + '/database.csv'#To store info for calculating
     """Count how many invites the command giver has"""
@@ -692,7 +692,7 @@ async def userank(cmd, user:Optional[discord.Member]):
             )
         ]
     )
-@commands.has_role(SENIOR_MOD_ROLE_ID)
+@commands.has_any_role(TICKET_MOD_ROLE_ID, ADMIN_MOD_ROLE_ID, SENIOR_MOD_ROLE_ID)
 async def collect_contestSubmission(context, channel:Optional[discord.TextChannel], key_word: str):
     sub_data = pd.read_csv(csv_file, sep="\t", dtype = {'mem_id': str})
     csv_invite = pd.read_csv(
@@ -750,7 +750,7 @@ async def collect_contestSubmission(context, channel:Optional[discord.TextChanne
             )
         ]
     )
-@commands.has_role(SENIOR_MOD_ROLE_ID)
+@commands.has_any_role(ADMIN_MOD_ROLE_ID, SENIOR_MOD_ROLE_ID)
 async def event_participation(context, channel:Optional[discord.VoiceChannel]):
     #open database
     sub_data = pd.read_csv(csv_file, sep="\t", dtype = {'mem_id': str})
