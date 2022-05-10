@@ -63,7 +63,6 @@ async def round_start(context, number:int, round:int):
 
 @com.command()
 async def SCORE(cmd):
-    await cmd.send("workinb")
     global counter, num_quota, this_round
     # Get round num through history in whitelist channeL
     if counter < num_quota:
@@ -201,6 +200,7 @@ async def SCORE(cmd):
                         var = cmd.guild.get_role(WHITELIST_WINNER_ROLE_ID)
                         winner = cmd.guild.get_member(int(row["mem_id"]))
                         await winner.add_roles(var)
+                        #updated_data.iloc[index, 14] = this_round #更新轮数
                         counter+=1
 
         updated_data.to_csv(csv_file, index=False, sep='\t')      
@@ -211,6 +211,7 @@ async def SCORE(cmd):
     
     """Sort by score"""
     tobeRank_data = updated_data[-updated_data['roles'].isin(["946544609511735336"])]
+    await cmd.send(tobeRank_data)
     tobeRank_data["ranks"] = tobeRank_data["score"].rank(method="min", ascending=False) #adding a new column "rank" to dataframe
 
     author_index = tobeRank_data[tobeRank_data.mem_id == str(cmd.author.id)].index.tolist()[0]
