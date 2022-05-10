@@ -49,7 +49,7 @@ if not os.path.exists(csv_file):
             )
         ]
     )
-@commands.has_role(TICKET_ADMIN_ROLE_ID, SENIOR_MOD_ID)
+@commands.has_any_role(TICKET_ADMIN_ROLE_ID, SENIOR_MOD_ID)
 async def round_start(context, number:int, round:int):
     global num_quota, counter, this_round
     num_quota = number
