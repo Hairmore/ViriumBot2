@@ -15,6 +15,7 @@ SERVER_ID =923145834890145802
 TICKET_ADMIN_ROLE_ID = 935826124368404500 #Admins have the right to start a new round
 WHITELIST_CHANNEL = 940756444486205490
 WHITELIST_WINNER_ROLE_ID = 946544609511735336
+SENIOR_MOD_ID = 947164819927236648
 bot_token = os.environ['CALCU_TOKEN']
 
 
@@ -48,7 +49,7 @@ if not os.path.exists(csv_file):
             )
         ]
     )
-@commands.has_role(TICKET_ADMIN_ROLE_ID)
+@commands.has_role(TICKET_ADMIN_ROLE_ID, SENIOR_MOD_ID)
 async def round_start(context, number:int, round:int):
     global num_quota, counter, this_round
     num_quota = number
