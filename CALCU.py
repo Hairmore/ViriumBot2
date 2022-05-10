@@ -198,6 +198,7 @@ async def SCORE(cmd):
             if counter <=num_quota:
                 if score >= THRESHOLD_SCORE:
                     if "946544609511735336" not in role_name:
+                        await cmd.send("no name")
                         """Whitelist winner"""
                         var = cmd.guild.get_role(WHITELIST_WINNER_ROLE_ID)
                         winner = cmd.guild.get_member(int(row["mem_id"]))
