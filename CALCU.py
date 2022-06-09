@@ -165,10 +165,10 @@ async def SCORE(cmd):
                 score += 0.5
             #Calculation based on invite
             invit = row['Invites']
-            score += invit//5 #Every 5 invites gets 1p
+            score += invit #Every 1 invites gets 1p
             #For influencer
             follower_num = row["InfluencerFollower"]
-            score += follower_num
+            score += follower_num // 5000
             #Contest and event engagement
             CE = row["eventEngageTimes"]
             score += CE
