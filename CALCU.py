@@ -9,7 +9,7 @@ import os
 import numpy as np
 import re
 
-THRESHOLD_SCORE = 20
+THRESHOLD_SCORE = 30
 WHITELIST_ROUND = 4 
 SERVER_ID =923145834890145802
 TICKET_ADMIN_ROLE_ID = 935826124368404500 #Admins have the right to start a new round
@@ -127,7 +127,7 @@ async def SCORE(cmd):
             score = 0
             if "935827755055079475" in role_name:
                 """OG"""
-                score += 15
+                score += 20
             if "943990732342067281" in role_name:
                 """LEVEL 10"""
                 score += 10
