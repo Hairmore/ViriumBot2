@@ -82,15 +82,6 @@ async def SCORE(cmd):
         dtype = {'user_id': str,'inviter_id':str}
     ) 
     csv_invite = csv_invite.drop_duplicates(['user_id'])
-    print("everything starts here")
-    try:
-        invite_times = csv_invite['inviter_id'].value_counts()[str(cmd.author.id)]
-        print(cmd.author.name, str(cmd.author.id))
-        print("invite times is ",invite_times)
-    except KeyError:
-        print(cmd.author.name)
-        print("keyerror, 0 is it")
-        invite_times = 0
     """Compare it with existing data"""
     existing_data = pd.read_csv(csv_file, sep="\t", dtype = {'mem_id': str})
     existing_ids = [id for id in existing_data["mem_id"].tolist()]
@@ -100,6 +91,11 @@ async def SCORE(cmd):
             roles = [r.id for r in member.roles]
             inter_set = list(set(team_role)&set(roles))
             if len(inter_set) == 0:
+                #获得invite数量
+                try:
+                    invite_times = csv_invite['inviter_id'].value_counts()[str(member.id)]
+                except KeyError:
+                    invite_times = 0
                 dic_data = {}
                 if str(member.id) not in existing_ids:
                     print("new", invite_times)
