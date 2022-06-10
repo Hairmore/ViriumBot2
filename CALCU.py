@@ -211,9 +211,6 @@ async def SCORE(cmd):
                         winner = cmd.guild.get_member(int(row["mem_id"]))
                         await winner.add_roles(var)
                         counter+=1
-                        resulta = f"""Congratulation {winner.mention}! You just won a whitelist position!"""
-                        await cmd.send(resulta)
-                        await cmd.send(f"@everyone, {num_quota-counter} positions left.")
                         #updated_data.iloc[index, 14] = this_round #更新轮数
                         
 
@@ -243,8 +240,9 @@ async def SCORE(cmd):
 
         embedVar = discord.Embed(title="🎖 WHITELIST SCORE 🎖", description=result, color=0xD7BA99)
         embedVar.set_author(name=cmd.author.display_name,  icon_url=cmd.author.avatar_url)
-        embedVar.set_image(url="https://d1fmx1rbmqrxrr.cloudfront.net/cnet/optim/i/edit/2021/12/NFT-tout-savoir-big__w770.jpg")
+        #embedVar.set_image(url="https://d1fmx1rbmqrxrr.cloudfront.net/cnet/optim/i/edit/2021/12/NFT-tout-savoir-big__w770.jpg")
         await cmd.send(embed=embedVar)
+        await cmd.send(f"@everyone, {num_quota-counter} whitelist positions left")
     
     except IndexError:
         message = "Congrats {0}! You've already on the whitelist".format(str(cmd.author).split("#")[0])
