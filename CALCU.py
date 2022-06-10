@@ -85,6 +85,7 @@ async def SCORE(cmd):
     csv_invite = csv_invite.drop_duplicates(['user_id'])
     try:
         invite_times = csv_invite['inviter_id'].value_counts()[str(cmd.author.id)]
+        print(invite_times)
     except KeyError:
         invite_times = 0
     """Compare it with existing data"""
