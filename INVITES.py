@@ -43,7 +43,7 @@ async def on_member_join(member):
         dic_inv_info['inviter_name'] = inviter.name
         dic_inv_info['inviter_id'] = str(inviter.id)
         df_adding = pd.read_csv(csv_file, sep="\t", dtype = {'user_id': str,'inviter_id':str})
-        df_new_row = pd.DataFrame(dic_inv_info)
+        df_new_row = pd.DataFrame([dic_inv_info])
         print(6, "new line", df_new_row)
         df_adding = pd.concat([df_adding, df_new_row])
         print(7, "new data", df_adding)
