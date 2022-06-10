@@ -85,8 +85,11 @@ async def SCORE(cmd):
     csv_invite = csv_invite.drop_duplicates(['user_id'])
     try:
         invite_times = csv_invite['inviter_id'].value_counts()[str(cmd.author.id)]
-        print(invite_times)
+        print(cmd.author.name, str(cmd.author.id))
+        print("invite times is ",invite_times)
     except KeyError:
+        print(cmd.author.name)
+        print("keyerror, 0 is it")
         invite_times = 0
     """Compare it with existing data"""
     existing_data = pd.read_csv(csv_file, sep="\t", dtype = {'mem_id': str})
@@ -99,6 +102,7 @@ async def SCORE(cmd):
             if len(inter_set) == 0:
                 dic_data = {}
                 if str(member.id) not in existing_ids:
+                    print("new", invite_times)
                     #If someone new enters our server
                     dic_data["mem_id"] = str(member.id)
                     dic_data["mem_name"] = member.name
@@ -118,6 +122,7 @@ async def SCORE(cmd):
                     existing_data = existing_data.append([dic_data], ignore_index=True)
                 else:
                     #We update current info
+                    print("exist", invite_times)
                     index_ = existing_ids.index(str(member.id))
                     existing_data.iloc[index_, 2] = str(list([role.id for role in member.roles]))
                     existing_data.iloc[index_, 7] = invite_times
