@@ -56,7 +56,6 @@ async def round_start(context, number:int, round:int):
     this_round = round
     counter = 0
     old_data = pd.read_csv(csv_file, sep="\t", dtype = {'mem_id': str})
-    print(old_data)
     #existing_data = old_data[-old_data['roles'].isin(["946544609511735336"])]
     #print(existing_data)
     resulta = f"""@everyone. Whitelist contest starts now!
