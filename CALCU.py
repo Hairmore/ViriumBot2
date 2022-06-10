@@ -59,8 +59,12 @@ async def round_start(context, number:int, round:int):
     print(old_data)
     #existing_data = old_data[-old_data['roles'].isin(["946544609511735336"])]
     #print(existing_data)
-    await context.send(f'We will give {num_quota} whitelists in round {this_round}')
-
+    resulta = f"""@everyone. Whitelist contest starts now!
+                  {num_quota} whitelist positions will be given in this round.
+                """
+    embedVar = discord.Embed(title=f"🎖 WHITELIST CONTEST -- ROUND {this_round} 🎖", description=resulta, color=0xD7BA99)
+    embedVar.set_author(name=cmd.author.display_name,  icon_url=cmd.author.avatar_url)
+    await cmd.send(embed=embedVar)
 
 @com.command()
 async def SCORE(cmd):
@@ -128,7 +132,7 @@ async def SCORE(cmd):
             score = 0
             if "935827755055079475" in role_name:
                 """OG"""
-                score += 20
+                score += 25
             if "943990732342067281" in role_name:
                 """LEVEL 10"""
                 score += 10
