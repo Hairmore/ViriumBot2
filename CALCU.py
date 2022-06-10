@@ -64,7 +64,7 @@ async def round_start(context, number:int, round:int):
                 """
     embedVar = discord.Embed(title=f"🎖 WHITELIST CONTEST -- ROUND {this_round} 🎖", description=resulta, color=0xD7BA99)
     embedVar.set_author(name=context.author.display_name,  icon_url=context.author.avatar_url)
-    await cmd.send(embed=embedVar)
+    await context.send(embed=embedVar)
 
 @com.command()
 async def SCORE(cmd):
