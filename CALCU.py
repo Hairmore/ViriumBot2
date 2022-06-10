@@ -63,7 +63,7 @@ async def round_start(context, number:int, round:int):
                   {num_quota} whitelist positions will be given in this round.
                 """
     embedVar = discord.Embed(title=f"🎖 WHITELIST CONTEST -- ROUND {this_round} 🎖", description=resulta, color=0xD7BA99)
-    embedVar.set_author(name=cmd.author.display_name,  icon_url=cmd.author.avatar_url)
+    embedVar.set_author(name=context.author.display_name,  icon_url=context.author.avatar_url)
     await cmd.send(embed=embedVar)
 
 @com.command()
