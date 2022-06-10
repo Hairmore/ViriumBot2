@@ -210,6 +210,9 @@ async def SCORE(cmd):
                         var = cmd.guild.get_role(WHITELIST_WINNER_ROLE_ID)
                         winner = cmd.guild.get_member(int(row["mem_id"]))
                         await winner.add_roles(var)
+                        resulta = f"""Congratulation {winner.mention}! You just won a whitelist position!"""
+                        await context.send(resulta)
+                        await context.send(f"@everyone, {num_quota-counter} positions left.")
                         #updated_data.iloc[index, 14] = this_round #更新轮数
                         counter+=1
 
