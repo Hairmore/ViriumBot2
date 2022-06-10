@@ -51,7 +51,7 @@ if not os.path.exists(csv_file):
     )
 @commands.has_any_role(TICKET_ADMIN_ROLE_ID, SENIOR_MOD_ID)
 async def round_start(context, number:int, round:int):
-    global num_quota, counter, this_round
+    global num_quota, this_round, counter
     num_quota = number
     this_round = round
     counter = 0
@@ -70,7 +70,7 @@ async def SCORE(cmd):
     global counter, num_quota, this_round
     # Get round num through history in whitelist channeL
     try:
-        print(counter, num_quota)
+        print("hello", counter, num_quota)
     except NameError:
         await cmd.send(f"{cmd.guild.get_role(TICKET_ADMIN_ROLE_ID).mention}, Please inform the bot how many whitelist will be given with command `/whitelist_number`.")
     ##########################
@@ -82,6 +82,7 @@ async def SCORE(cmd):
         dtype = {'user_id': str,'inviter_id':str}
     ) 
     csv_invite = csv_invite.drop_duplicates(['user_id'])
+    print("everything starts here")
     try:
         invite_times = csv_invite['inviter_id'].value_counts()[str(cmd.author.id)]
         print(cmd.author.name, str(cmd.author.id))
