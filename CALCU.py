@@ -226,7 +226,9 @@ async def SCORE(cmd):
     
     """Sort by score"""    
     tobeRank_data = updated_data[~updated_data["roles_name"].str.contains('Whitelist Winner')]
-    tobeRank_data["ranks"] = tobeRank_data["score"].rank(method="min", ascending=False) #adding a new column "rank" to dataframe
+    df_temp.insert(loc=0, column='Quarter', value=df_temp.index.quarter)
+    tobeRank_data.insert(loc=14, column='ranks', value=tobeRank_data["score"].rank(method="min", ascending=False))
+    #tobeRank_data["ranks"] = tobeRank_data["score"].rank(method="min", ascending=False) #adding a new column "rank" to dataframe
     try:
         author_index = tobeRank_data[tobeRank_data.mem_id == str(cmd.author.id)].index.tolist()[0]
         rank = tobeRank_data.iloc[author_index, 15]
