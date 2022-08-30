@@ -94,7 +94,9 @@ async def SCORE(cmd):
                 #获得invite数量
                 try:
                     invite_times = csv_invite['inviter_id'].value_counts()[str(member.id)]
+                    print(invite_times)
                 except KeyError:
+                    print("invite 出错")
                     invite_times = 0
                 dic_data = {}
                 if str(member.id) not in existing_ids:
