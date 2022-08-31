@@ -95,16 +95,17 @@ async def SCORE(cmd):
             inter_set = list(set(team_role)&set(roles))
             if len(inter_set) == 0:
                 #获得invite数量
-                invite_times = csv_invite['inviter_id'].value_counts()[str(member.id)]
-                print("次数", invite_times)
-                """
+                print("id", str(member.id))
+                
                 try:
                     invite_times = csv_invite['inviter_id'].value_counts()[str(member.id)]
                     print("次数", invite_times)
                 except Exception as e:
                     print("错误原因", str(e))
                     invite_times = 0
-                
+                invite_times = csv_invite['inviter_id'].value_counts()[str(member.id)]
+                print("次数", invite_times)
+                """
                 except KeyError:
                     print("invite 出错")
                     invite_times = 0
