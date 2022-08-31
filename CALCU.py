@@ -56,11 +56,12 @@ async def round_start(context, number:int, round:int):
     num_quota = number - 3
     this_round = round
     counter = 0
+    real_number = num_quota + 3
     old_data = pd.read_csv(csv_file, sep="\t", dtype = {'mem_id': str})
     #existing_data = old_data[-old_data['roles'].isin(["946544609511735336"])]
     #print(existing_data)
     resulta = f"""@everyone. Whitelist contest starts now!
-                  {num_quota} whitelist positions will be given in this round.
+                  {real_number} whitelist positions will be given in this round.
                 """
     embedVar = discord.Embed(title=f"🎖 WHITELIST CONTEST -- ROUND {this_round} 🎖", description=resulta, color=0xD7BA99)
     embedVar.set_author(name=context.author.display_name,  icon_url=context.author.avatar_url)
