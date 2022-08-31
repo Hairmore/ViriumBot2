@@ -9,6 +9,7 @@ from typing import Optional
 import os
 import numpy as np
 import re
+import traceback
 
 THRESHOLD_SCORE = 30
 WHITELIST_ROUND = 4 
@@ -97,9 +98,13 @@ async def SCORE(cmd):
                 try:
                     invite_times = csv_invite['inviter_id'].value_counts()[str(member.id)]
                     print(invite_times)
+                except Exception as e:
+                    print(str(e))
+                """
                 except KeyError:
                     print("invite 出错")
                     invite_times = 0
+                """
                 dic_data = {}
                 if str(member.id) not in existing_ids:
                     print("new", invite_times)
