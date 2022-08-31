@@ -1,3 +1,4 @@
+#修改number - 3
 from tkinter import ROUND
 import pandas as pd
 import discord
@@ -52,7 +53,7 @@ if not os.path.exists(csv_file):
 @commands.has_any_role(TICKET_ADMIN_ROLE_ID, SENIOR_MOD_ID)
 async def round_start(context, number:int, round:int):
     global num_quota, this_round, counter
-    num_quota = number
+    num_quota = number - 3
     this_round = round
     counter = 0
     old_data = pd.read_csv(csv_file, sep="\t", dtype = {'mem_id': str})
