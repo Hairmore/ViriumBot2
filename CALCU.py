@@ -97,7 +97,7 @@ async def SCORE(cmd):
                 #获得invite数量
                 try:
                     invite_times = csv_invite['inviter_id'].value_counts()[str(member.id)]
-                    print("次数"，invite_times)
+                    print("次数", invite_times)
                 except Exception as e:
                     print("错误原因", str(e))
                     invite_times = 0
