@@ -78,6 +78,7 @@ async def SCORE(cmd):
         await cmd.send(f"{cmd.guild.get_role(TICKET_ADMIN_ROLE_ID).mention}, Please inform the bot how many whitelist will be given with command `/whitelist_number`.")
     ##########################
     members = cmd.guild.members
+    print(len(cmd.guild.members))
     """Count how many invites the command give'/database_inviter.csv', r has"""
     csv_invite = pd.read_csv(
         os.getcwd() + "/database_inviter.csv",
@@ -96,15 +97,12 @@ async def SCORE(cmd):
             inter_set = list(set(team_role)&set(roles))
             if len(inter_set) == 0:
                 #获得invite数量
-                print("id", str(member.id), member.name)
+                #print("id", str(member.id), member.name)
                 
                 try:
                     invite_times = csv_invite['inviter_id'].value_counts()[str(member.id)]
                     if member.name == "Ethan wu":
                         print("次数", invite_times)
-           
-                #invite_times = csv_invite['inviter_id'].value_counts()[str(member.id)]
-                #print("次数", invite_times)
                 
                 except KeyError:
                     #print("invite 出错")
