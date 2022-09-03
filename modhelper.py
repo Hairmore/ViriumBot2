@@ -818,9 +818,9 @@ async def invite_tracker(context, user:Optional[discord.Member]):
     )
     try:
         invite_times = csv_invite['inviter_id'].value_counts()[str(user.id)]
-        await context.send(f'{user.name}', 'has invited' f'{invite_times}', 'people.')
+        await context.send(f'{user.name} has invited f{invite_times} people.')
     except KeyError:
-        await context.send(f'{user.name}', 'has 0 invites.')
+        await context.send(f'{user.name} has 0 invites.')
                           
          
 
