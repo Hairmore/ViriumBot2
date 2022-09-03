@@ -80,7 +80,7 @@ async def SCORE(cmd):
     members = cmd.guild.members
     """Count how many invites the command give'/database_inviter.csv', r has"""
     csv_invite = pd.read_csv(
-        os.getcwd() + 
+        os.getcwd() + "/database_inviter.csv"
         sep="\t",
         dtype = {'user_id': str,'inviter_id':str}
     ) 
@@ -95,7 +95,7 @@ async def SCORE(cmd):
             inter_set = list(set(team_role)&set(roles))
             if len(inter_set) == 0:
                 #获得invite数量
-                print("id", str(member.id))
+                print("id", str(member.id), member.name)
                 
                 try:
                     invite_times = csv_invite['inviter_id'].value_counts()[str(member.id)]
