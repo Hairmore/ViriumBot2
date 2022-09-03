@@ -80,7 +80,7 @@ async def SCORE(cmd):
     members = cmd.guild.members
     """Count how many invites the command give'/database_inviter.csv', r has"""
     csv_invite = pd.read_csv(
-        os.getcwd() + "/database_inviter.csv"
+        os.getcwd() + "/database_inviter.csv",
         sep="\t",
         dtype = {'user_id': str,'inviter_id':str}
     ) 
