@@ -95,7 +95,7 @@ async def SCORE(cmd):
             inter_set = list(set(team_role)&set(roles))
             if len(inter_set) == 0:
                 #获得invite数量
-                print("id", str(member.id), member.name)
+                print("id", str(member.id))
                 
                 try:
                     invite_times = csv_invite['inviter_id'].value_counts()[str(member.id)]
