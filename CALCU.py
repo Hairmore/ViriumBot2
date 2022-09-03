@@ -90,6 +90,7 @@ async def SCORE(cmd):
     existing_ids = [id for id in existing_data["mem_id"].tolist()]
     for member in members:
         if not member.bot:
+            print("这次用户",member.name)
             team_role = [936964587717263400, 935826124368404500, 947164819927236648, 935827096373186630]#origine admin senior junior
             roles = [r.id for r in member.roles]
             inter_set = list(set(team_role)&set(roles))
