@@ -107,7 +107,7 @@ async def SCORE(cmd):
                 #print("次数", invite_times)
                 
                 except KeyError:
-                    print("invite 出错")
+                    #print("invite 出错")
                     invite_times = 0
              
                 dic_data = {}
@@ -132,7 +132,8 @@ async def SCORE(cmd):
                     existing_data = existing_data.append([dic_data], ignore_index=True)
                 else:
                     #We update current info
-                    print("exist", invite_times)
+                    if invite_times > 0:
+                        print("exist", invite_times)
                     index_ = existing_ids.index(str(member.id))
                     existing_data.iloc[index_, 2] = str(list([role.id for role in member.roles]))
                     existing_data.iloc[index_, 7] = invite_times
