@@ -53,16 +53,14 @@ if not os.path.exists(csv_file):
     )
 @commands.has_any_role(TICKET_ADMIN_ROLE_ID, SENIOR_MOD_ID)
 async def round_start(context, number:int, round:int):
-    global num_quota, this_round, counter
-    num_quota = number - 3
+    global num_quota, this_round
+    num_quota = number
     this_round = round
-    counter = 0
-    real_number = num_quota + 3
     old_data = pd.read_csv(csv_file, sep="\t", dtype = {'mem_id': str})
     #existing_data = old_data[-old_data['roles'].isin(["946544609511735336"])]
     #print(existing_data)
     resulta = f"""@everyone. Whitelist contest starts now!
-                  {real_number} whitelist positions will be given in this round.
+                  {num_quota} whitelist positions will be given in this round.
                 """
     embedVar = discord.Embed(title=f"🎖 WHITELIST CONTEST -- ROUND {this_round} 🎖", description=resulta, color=0xD7BA99)
     embedVar.set_author(name=context.author.display_name,  icon_url=context.author.avatar_url)
@@ -70,10 +68,10 @@ async def round_start(context, number:int, round:int):
 
 @com.command()
 async def SCORE(cmd):
-    global counter, num_quota, this_round
+    global num_quota, this_round
     # Get round num through history in whitelist channeL
     try:
-        print("hello", counter, num_quota)
+        print("hello", num_quota)
     except NameError:
         await cmd.send(f"{cmd.guild.get_role(TICKET_ADMIN_ROLE_ID).mention}, Please inform the bot how many whitelist will be given with command `/whitelist_number`.")
     ##########################
@@ -88,6 +86,8 @@ async def SCORE(cmd):
     csv_invite = csv_invite.drop_duplicates(['user_id'])
     """Compare it with existing data"""
     existing_data = pd.read_csv(csv_file, sep="\t", dtype = {'mem_id': str})
+    counter = existing_data[existing_data['roles_name'].str.contains('Whitelist Winner')].shape[0]
+    print("counter",counter)
     existing_ids = [id for id in existing_data["mem_id"].tolist()]
     for member in members:
         if not member.bot:
@@ -224,6 +224,8 @@ async def SCORE(cmd):
                         winner = cmd.guild.get_member(int(row["mem_id"]))
                         await winner.add_roles(var)
                         counter+=1
+                    
+                        
                         #updated_data.iloc[index, 14] = this_round #更新轮数
                         
 
