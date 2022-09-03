@@ -681,7 +681,7 @@ async def userank(cmd, user:Optional[discord.Member]):
             name = "channel",
             description = "Choose the contest channel",
             required=True,
-            option_type = 7 #type 6 is channel
+            option_type = 7 #type 7 is channel
             ),
 
         create_option(
@@ -746,7 +746,7 @@ async def collect_contestSubmission(context, channel:Optional[discord.TextChanne
             name = "channel",
             description = "Choose the voice channel where the event is hosted",
             required=True,
-            option_type = 7 #type 6 is channel
+            option_type = 7 #type 7 is channel
             )
         ]
     )
@@ -794,6 +794,35 @@ async def event_participation(context, channel:Optional[discord.VoiceChannel]):
 
     
     await context.send("Event channel member counting done!")
+    
+##################################################### Invite number tracker #####################################################
+@slash.slash(
+    name = "invite_tracker",
+    description = "Use this command to get members' number of invites",
+    guild_ids = [SERVER_ID], #server id
+    options = [
+        create_option(
+            name = "user",
+            description = "Choose the user to track his/her invites",
+            required=True,
+            option_type = 6 #type 6 is user
+            )
+        ]
+    )
+@commands.has_any_role(ADMIN_MOD_ROLE_ID, SENIOR_MOD_ROLE_ID)
+async def invite_tracker(context, user:Optional[discord.Member]):
+    csv_invite = pd.read_csv(
+        os.getcwd() + "/database_inviter.csv",
+        sep="\t",
+        dtype = {'user_id': str,'inviter_id':str}
+    )
+    try:
+        invite_times = csv_invite['inviter_id'].value_counts()[str(user.id)]
+        await context.send(f'{user.name}', 'has invited' f'{invite_times}', 'people.')
+    except KeyError:
+        await context.send(f'{user.name}', 'has 0 invites.')
+                          
+         
 
 
 
